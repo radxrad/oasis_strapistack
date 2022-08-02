@@ -7,7 +7,7 @@ module.exports = {
     ],
     images: {
         loader: "default",
-        domains: ['dummyimage.com','source.unsplash.com',"localhost"],
+        domains: ['dummyimage.com','source.unsplash.com',"localhost","strapi-ynme.onrender.com",],
     },
     sassOptions: {
         includePaths: [path.join(__dirname, 'styles')],
