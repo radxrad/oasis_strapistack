@@ -2,7 +2,8 @@ import Moment from "react-moment";
 import ReactMarkdown from "react-markdown";
 
 //import Seo from "../../components/seo";
-import Layout from "../../components/layout";
+import Layout from "../../components/Layout";
+import Image from 'next/image'
 
 import { fetchAPI } from "../../lib/api";
 import { getStrapiMedia } from "../../lib/media";
@@ -36,7 +37,7 @@ const Article = ({ article, categories }) => {
                     <div className="uk-grid-small uk-flex-left" data-uk-grid="true">
                         <div>
                             {article.attributes.author.data.attributes.picture && (
-                                <img
+                                <Image
                                     src={getStrapiMedia(
                                         article.attributes.author.data.attributes.picture
                                     )}
