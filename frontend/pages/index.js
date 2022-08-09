@@ -200,6 +200,7 @@ export async function getStaticProps() {
   // Run API calls in parallel
   const [articlesRes, categoriesRes, homepageRes] = await Promise.all([
     fetchAPI("/articles", { populate: ["image", "category"] }),
+   // fetchAPI("/micopublications", { populate: ["Files", "Category"] }),
     fetchAPI("/categories", { populate: "*" }),
     fetchAPI("/homepage", {
       populate: {

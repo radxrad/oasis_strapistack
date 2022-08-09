@@ -4,6 +4,6 @@
     "react/no-unescaped-entities": "off",
     "react/no-children-prop": "off",
     "react/no-children-prop": "off",
-    "@next/next/no-img-element0": "off",
+    "@next/next/no-img-element0": "off"
   }
 }
