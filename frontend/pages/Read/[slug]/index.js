@@ -74,31 +74,38 @@ export default function Index() {
 
   useEffect(() => {
     if(!router.isReady) return;
-    const { id } = router.query
+    const { slug } = router.query
     console.log("query")
-    console.log("passed id" + id )
-    var qid = id
-    var url = `/articles/${qid}`
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
+    console.log("passed slug: " + slug )
+   // var qid = id
+   // var url = `/articles/${qid}`
+    // fetch(url, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-type': 'application/json; charset=UTF-8'
+    //   },
+    //   // body: JSON.stringify(form)
+    //   //body: body
+    // })
+    fetchAPI("/micropublications", {
+      filters: {
+        slug: slug,
       },
-      // body: JSON.stringify(form)
-      //body: body
+      populate: ["image", "category", "author.picture"],
     })
-        .then(
-            response => response.json()
-        )
+        // .then(
+        //     response => response.json()
+        // )
         .then(data => {
           if (data.errors){
             setMicropubs([]);
           }
             let pubs = data
-            if (! Array.isArray(data)  ){
-              pubs = [data]
+            if (! Array.isArray(data.data)  ){
+              pubs = [data.data]
             }
-             pubs = postsToMicropub(pubs)
+            // pubs = postsToMicropub(pubs)
+          pubs = data.data
             console.log(pubs);
             setMicropubs(pubs);
 
@@ -107,6 +114,7 @@ export default function Index() {
       //  navigate('/message?d=postfail')
       })
   }, [router.isReady, router.query])
+
   const handleVoteClick = (type) => {
     if (voteType === null) {
       setVoteNum(type === true ? voteNum + 1 : voteNum - 1);
@@ -160,14 +168,14 @@ export default function Index() {
       <div>
       {micropubs.length > 0 &&
       <MicropubBody
-          figure={micropubs.attributesfigure}
-          authorIds={micropubs.attributes.authorNames}
-          title={micropubs.attributes.title}
-          abstract={micropubs[0].abstract}
+          figure={micropubs.attributes?.figure}
+          authorIds={micropubs.attributes?.authorNames}
+          title={micropubs[0].attributes.title}
+          abstract={micropubs[0].attributes.abstract}
           id={micropubs[0].id}
-          body={micropubs[0].body}
+          body={micropubs[0].attributes?.body}
           mp={micropubs[0]}
-          refList={micropubs[0].refList}
+          refList={micropubs[0].attributes?.citation}
       ></MicropubBody>
       }
       {writeReview}

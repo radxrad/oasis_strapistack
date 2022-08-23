@@ -8,13 +8,13 @@ import Image from 'next/image'
 import { fetchAPI } from "../../lib/api";
 import { getStrapiMedia } from "../../lib/media";
 
-const Micropub = ({ article, categories }) => {
-    const imageUrl = getStrapiMedia(article.attributes.image);
+const Micropub = ({ article: micropub, categories }) => {
+    const imageUrl = getStrapiMedia(micropub.attributes.image);
 
     const seo = {
-        metaTitle: article.attributes.title,
-        metaDescription: article.attributes.description,
-        shareImage: article.attributes.image,
+        metaTitle: micropub.attributes.title,
+        metaDescription: micropub.attributes.description,
+        shareImage: micropub.attributes.image,
         article: true,
     };
 
@@ -28,21 +28,21 @@ const Micropub = ({ article, categories }) => {
                 data-srcset={imageUrl}
                 data-uk-img
             >
-                <h1>{article.attributes.title}</h1>
+                <h1>{micropub.attributes.title}</h1>
             </div>
             <div className="uk-section">
                 <div className="uk-container uk-container-small">
-                    <ReactMarkdown children={article.attributes.content} />
+                    <ReactMarkdown children={micropub.attributes.abstract} />
                     <hr className="uk-divider-small" />
                     <div className="uk-grid-small uk-flex-left" data-uk-grid="true">
                         <div>
-                            {article.attributes.author.data.attributes.picture && (
+                            {micropub.attributes.writer.data.attributes.picture && (
                                 <Image
                                     src={getStrapiMedia(
-                                        article.attributes.author.data.attributes.picture
+                                        micropub.attributes.writer.data.attributes.picture
                                     )}
                                     alt={
-                                        article.attributes.author.data.attributes.picture.data
+                                        micropub.attributes.writer.data.attributes.picture.data
                                             .attributes.alternativeText
                                     }
                                     style={{
@@ -55,11 +55,11 @@ const Micropub = ({ article, categories }) => {
                         </div>
                         <div className="uk-width-expand">
                             <p className="uk-margin-remove-bottom">
-                                By {article.attributes.author.data.attributes.name}
+                                By {micropub.attributes.writer.data.attributes.name}
                             </p>
                             <p className="uk-text-meta uk-margin-remove-top">
                                 <Moment format="MMM Do YYYY">
-                                    {article.attributes.published_at}
+                                    {micropub.attributes.published_at}
                                 </Moment>
                             </p>
                         </div>
@@ -71,7 +71,7 @@ const Micropub = ({ article, categories }) => {
 };
 
 export async function getStaticPaths() {
-    const articlesRes = await fetchAPI("/articles", { fields: ["slug"] });
+    const articlesRes = await fetchAPI("/micopublications", { fields: ["slug"] });
 
     return {
         paths: articlesRes.data.map((article) => ({
@@ -84,11 +84,11 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-    const articlesRes = await fetchAPI("/articles", {
+    const articlesRes = await fetchAPI("/micopublications", {
         filters: {
             slug: params.slug,
         },
-        populate: ["image", "category", "author.picture"],
+        populate: ["image", "category", "writer.picture"],
     });
     const categoriesRes = await fetchAPI("/categories");
 

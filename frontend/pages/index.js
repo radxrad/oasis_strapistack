@@ -12,9 +12,10 @@ import axios from "axios";
 import postsToMicropub from '../js/postToMicropub'
 import Micropubs from "../components/micropubs";
 import { fetchAPI } from "../lib/api";
+import {getMicropubMedia} from "../lib/media";
 
 
-export default function Index({ articles, categories, homepage }) {
+export default function Index({ articles, categories, micropublications, homepage }) {
   //const example = text.micropub;
  // const [micropubs, setMicropubs] = useState([]);
   const [isSignedIn, setIsSignedIn] = useState(true);
@@ -170,7 +171,7 @@ export default function Index({ articles, categories, homepage }) {
         <Row className="preview">
           <p className="preview__subtitle">Featured QUESTIONS AND MICROPUBS</p>
           <div className="mp-list">
-            <Micropubs articles={articles} />
+            <Micropubs articles={micropublications} />
           {/*  <MicropubCard*/}
           {/*    img={example.img}*/}
           {/*    authorIds={example.authorIds}*/}
@@ -179,16 +180,13 @@ export default function Index({ articles, categories, homepage }) {
           {/*    uid={example.uid}*/}
           {/*></MicropubCard>*/}
 
-          {/*  {posts.latest_posts.slice(0,3).map(post =>*/}
-          {/*      <MicropubCard*/}
-          {/*          img={example.img}*/}
-          {/*          authorIds={post.username}*/}
-          {/*          title={post.topic_html_title}*/}
-          {/*          abstract={post.raw}*/}
-          {/*          uid={post.id}*/}
-          {/*      ></MicropubCard>*/}
-          {/*  )*/}
-          {/*  }*/}
+            {micropublications.slice(0,3).map(post =>
+                <MicropubCard
+                    micropub={post}
+
+                ></MicropubCard>
+            )
+            }
 
           </div>
         </Row>
@@ -198,10 +196,10 @@ export default function Index({ articles, categories, homepage }) {
 }
 export async function getStaticProps() {
   // Run API calls in parallel
-  const [articlesRes, categoriesRes, homepageRes] = await Promise.all([
+  const [articlesRes, categoriesRes, micropubRes, homepageRes] = await Promise.all([
     fetchAPI("/articles", { populate: ["image", "category"] }),
-   // fetchAPI("/micopublications", { populate: ["Files", "Category"] }),
     fetchAPI("/categories", { populate: "*" }),
+    fetchAPI("/micropublications", { populate: ["files", "keyword"] }),
     fetchAPI("/homepage", {
       populate: {
         hero: "*",
@@ -210,10 +208,11 @@ export async function getStaticProps() {
     }),
   ]);
 
-  return {
+return {
     props: {
       articles: articlesRes.data,
       categories: categoriesRes.data,
+      micropublications: micropubRes.data,
       homepage: homepageRes.data,
     },
     revalidate: 1,

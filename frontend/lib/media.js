@@ -5,3 +5,8 @@ export function getStrapiMedia(media) {
     const imageUrl = url.startsWith("/") ? getStrapiURL(url) : url;
     return imageUrl;
 }
+export function getMicropubMedia(media) {
+    const { url } = media.attributes;
+    const imageUrl = url.startsWith("/") ? getStrapiURL(url) : url;
+    return imageUrl;
+}

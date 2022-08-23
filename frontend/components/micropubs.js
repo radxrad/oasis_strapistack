@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "./card";
 
+
 const Micropubs = ({ articles }) => {
     const leftArticlesCount = Math.ceil(articles.length / 5);
     const leftArticles = articles.slice(0, leftArticlesCount);
