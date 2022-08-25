@@ -42,6 +42,9 @@ export default function Publish() {
   const [activeTab, setActiveTab] = useState("#abstract");
   const [errors, setErrors]= useState("");
   const [showError, setShowError] = useState(false);
+  const [files,setFiles] = useState();
+  const [authors,setAuthors] = useState();
+  const testImage = "https://dummyimage.com/520x200/000/F5F5F5.png"
 
   const handleErrorClose = () => setShowError(false);
   const handleErrorShow = () => setShowError(true);
@@ -221,15 +224,15 @@ export default function Publish() {
             <div className="preview">
               <div className="label">Card Preview</div>
               <MicropubCard
-                  img={micropub.img}
-                  authorIds={micropub.authorIds}
+                  img={testImage}
+                  authorIds={authors}
                   title={titleValue}
                   abstract={draftToHtml(convertToRaw(abstractValue.getCurrentContent()))}
               ></MicropubCard>
               <div className="label">Micropub Preview</div>
               <MicropubBody
                   title={titleValue}
-                  figure={micropub.img}
+                  figure={testImage}
                   body={draftToHtml(convertToRaw(bodyValue.getCurrentContent()))}
                   refList={refList}
               />

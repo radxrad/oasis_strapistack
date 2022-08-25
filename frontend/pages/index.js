@@ -181,7 +181,7 @@ export default function Index({ articles, categories, micropublications, homepag
           {/*></MicropubCard>*/}
 
             {micropublications.slice(0,3).map(post =>
-                <MicropubCard
+                <MicropubCard key={post.slug}
                     micropub={post}
 
                 ></MicropubCard>
