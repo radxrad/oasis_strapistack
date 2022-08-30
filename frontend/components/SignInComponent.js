@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { Form, Button } from "react-bootstrap";
+import {getStrapiURL} from "../lib/api";
 import axios from "axios";
 
 //import dynamic from 'next/dynamic';
@@ -18,19 +19,30 @@ function SignInComponent() {
    // const Auth = new Authenticate()
   async function handleSignIn(e) {
 
+      const { data } = await axios.post(getStrapiURL()+'/api/auth/local', {
+          identifier: username,
+          password: password,
+      }).then(response => {
+          console.log('User profile', response.data.user);
+          console.log('User token', response.data.jwt);
+          setLoggedIn(response.data)
+      })
+          .catch(error => {
+              console.log('An error occurred:', error.response);
+          });
    // console.log(Authenticate);
    // let auth =  await Auth.login(username,password)
-      fetch('api/signin', {
-          method: 'POST',
-          headers: {
-              'Content-type': 'application/json; charset=UTF-8'
-          },
-          // body: JSON.stringify(form)
-          body: JSON.stringify({username:username,password:password})
-      }).then( (auth) =>{
-          console.log(auth)
-          setLoggedIn(auth)
-      } )
+   //    fetch('api/signin', {
+   //        method: 'POST',
+   //        headers: {
+   //            'Content-type': 'application/json; charset=UTF-8'
+   //        },
+   //        // body: JSON.stringify(form)
+   //        body: JSON.stringify({username:username,password:password})
+   //    }).then( (auth) =>{
+   //        console.log(auth)
+   //        setLoggedIn(auth)
+   //    } )
 
     // const authClient = new Discourse({
     //   appName: 'Oasis',
